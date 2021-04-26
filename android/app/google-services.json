@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1049552077140",
+    "project_id": "taskmanager-fb774",
+    "storage_bucket": "taskmanager-fb774.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049552077140:android:5992ac1e88e91217c488c1",
+        "android_client_info": {
+          "package_name": "com.sahay.task_assigner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049552077140-r707f84biob76ibv8ou1f7tj7balrtuo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDObjCuExr4zF7fTx4ZAAQc5zAcskjt31Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049552077140-r707f84biob76ibv8ou1f7tj7balrtuo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

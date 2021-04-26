@@ -1,4 +1,4 @@
-# task_assigner_admin
+# task_assigner
 
 A new Flutter project.
 

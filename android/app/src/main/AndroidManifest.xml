@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.task_assigner_admin">
+    package="com.sahay.task_assigner">
    <application
-        android:label="task_assigner_admin"
+        android:label="task_assigner"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
