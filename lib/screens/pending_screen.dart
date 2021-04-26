@@ -29,7 +29,7 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-         Timer(Duration(seconds: 2,milliseconds: 50), () {
+        Timer(Duration(seconds: 2, milliseconds: 50), () {
           setState(() {
             _loadingProducts = false;
           });
@@ -64,7 +64,7 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
     await fetchDocuments(collection);
   }
 
-  Future<void>fetchDocuments(Query collection) async{
+  Future<void> fetchDocuments(Query collection) async {
     await collection.get().then((value) {
       collectionState =
           value; // store collection state to set where to start next
@@ -74,10 +74,10 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
           _pendingTaskList.add(
             Task(
               title: element.data()['title'],
-              description:
-                  'hfhdfhkjhdsfkhdkhf dshfdhfkdsjhf dkhfkjdhsfhdf dfdshf',
-              dateAssigned: null,
-              dateOfCompletion: null,
+              description: element.data()['description'],
+              dateAssigned: (element.data()['addedOn'] as Timestamp).toDate(),
+              pendingDate:
+                  (element.data()['pendingDate'] as Timestamp).toDate(),
             ),
           );
         });
@@ -95,13 +95,13 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
             child: ListView.builder(
               controller: _scrollController,
               itemBuilder: (ctx, index) {
-                if (index == _pendingTaskList.length)
+                if (index == _pendingTaskList.length && _pendingTaskList.length>=5)
                   return SpinKitFadingCircle(
                     color: Colors.white,
                   );
                 return TaskCard(_pendingTaskList[index]);
               },
-              itemCount: (_loadingProducts)
+              itemCount: (_loadingProducts && _pendingTaskList.length>=5)
                   ? _pendingTaskList.length + 1
                   : _pendingTaskList.length,
             ),

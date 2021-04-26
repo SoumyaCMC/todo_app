@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:task_assigner/models/task.dart';
 
+import 'package:intl/intl.dart';
+
 class TaskCard extends StatelessWidget {
   Task task;
 
@@ -57,7 +59,7 @@ class TaskCard extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       top: 15, bottom: 20, left: 25, right: 10),
                   child: Text(
-                    '5/8/2021',
+                    DateFormat('dd/MM/yy').format(task.pendingDate),
                     style: Theme.of(context).textTheme.subtitle1.copyWith(
                           color: Colors.grey[300],
                         ),
@@ -67,7 +69,7 @@ class TaskCard extends StatelessWidget {
                   padding: const EdgeInsets.only(
                       top: 15, bottom: 20, left: 25, right: 25),
                   child: Text(
-                    '4/26/2021',
+                    DateFormat('dd/MM/yy').format(task.dateAssigned),
                     style: Theme.of(context).textTheme.subtitle1.copyWith(
                           color: Colors.grey[300],
                         ),

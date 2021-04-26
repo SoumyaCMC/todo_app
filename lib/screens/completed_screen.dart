@@ -26,7 +26,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
           description:
               'This is a description hfhdfhd hdfhdhfd shfdhsfdojfldsfn dhsfhdhfhdsfkhsdb fhjshdjfsd hjdsfhdf huhsf dbfhdf ',
           dateAssigned: null,
-          dateOfCompletion: null),
+          pendingDate: null),
     );
     _scrollController = ScrollController();
     _scrollController.addListener(() {
@@ -49,7 +49,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
             description:
                 'This is a description hfhdfhd hdfhdhfd shfdhsfdojfldsfn dhsfhdhfhdsfkhsdb fhjshdjfsd hjdsfhdf huhsf dbfhdf ',
             dateAssigned: null,
-            dateOfCompletion: null),
+            pendingDate: null),
       );
     }
     _currentMax += 5;

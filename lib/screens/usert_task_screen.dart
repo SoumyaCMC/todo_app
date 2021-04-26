@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import 'package:task_assigner/screens/addTask_screen.dart';
 import 'package:task_assigner/screens/completed_screen.dart';
 import 'package:task_assigner/screens/pending_screen.dart';
 
@@ -44,6 +45,14 @@ class UserTaskScreen extends StatelessWidget {
             PendingTasksScreen(),
             CompletedTasksScreen(),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          heroTag: AddTaskScreen.routeName,
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context).pushNamed(AddTaskScreen.routeName);
+          },
+          backgroundColor: Theme.of(context).buttonColor,
         ),
       ),
     );
