@@ -12,16 +12,17 @@ class AddTaskScreen extends StatefulWidget {
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
 
-DateTime _selectedDate = DateTime.now();
-
 class _AddTaskScreenState extends State<AddTaskScreen> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   FocusNode _descriptionFocusNode = FocusNode();
+  FocusNode _titleFocusNode = FocusNode();
 
   Future<void> _showCalendar(BuildContext context) async {
     _descriptionFocusNode.unfocus();
+    _titleFocusNode.unfocus();
     await showRoundedDatePicker(
       theme: ThemeData.dark(),
       context: context,
@@ -33,6 +34,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         Duration(days: 31),
       ),
     ).then((pickedDate) {
+      if (pickedDate == null) pickedDate = DateTime.now();
       return setState(() {
         _selectedDate = pickedDate;
       });
@@ -42,6 +44,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   void dispose() {
     _descriptionFocusNode.dispose();
+    _titleFocusNode.dispose();
     super.dispose();
   }
 
@@ -68,12 +71,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   margin: EdgeInsets.only(top: 30, left: 5, right: 5),
                   width: deviceSize.width * 0.85,
                   child: TextField(
+                    //focusNode: _titleFocusNode,
                     autofocus: true,
                     controller: _titleController,
                     maxLines: 1,
                     style: Theme.of(context).textTheme.headline1,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
+                      hintText: 'Title',
                       contentPadding: EdgeInsets.all(20),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -115,6 +120,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     style: Theme.of(context).textTheme.headline1,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
+                      hintText: 'Description',
                       contentPadding: EdgeInsets.only(
                           top: 20, bottom: 20, left: 20, right: 15),
                       enabledBorder: OutlineInputBorder(
@@ -170,7 +176,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(20),
                         margin: EdgeInsets.only(top: 25, right: 5, left: 15),
-                        width: deviceSize.width * 0.675,
+                        width: deviceSize.width * 0.65,
                         height: 65,
                         decoration: BoxDecoration(
                           color: Theme.of(context).iconTheme.color,

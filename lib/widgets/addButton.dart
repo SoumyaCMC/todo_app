@@ -25,15 +25,15 @@ class _AddButtonState extends State<AddButton> {
         : InkWell(
             borderRadius: BorderRadius.circular(40),
             splashColor: Colors.grey,
-            onTap: () {
+            onTap: () async {
               setState(() {
                 _isLoading = true;
               });
-              FirebaseFirestore.instance.collection('tasks').add({
+              await FirebaseFirestore.instance.collection('tasks').add({
                 'title': widget.task.title,
                 'description': widget.task.description,
-                'pendingDate': widget.task.dateAssigned,
-                'addedOn': DateTime.now(),
+                'pendingDate': widget.task.pendingDate,
+                'addedOn': widget.task.dateAssigned,
                 'isCompleted':false,
               }).then((_) {
                 Navigator.of(context).pop();

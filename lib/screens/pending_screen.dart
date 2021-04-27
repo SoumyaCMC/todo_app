@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PendingTasksScreen extends StatefulWidget {
   @override
   _PendingTasksScreenState createState() => _PendingTasksScreenState();
+  PendingTasksScreen(this.needsReload);
+  bool needsReload = false;
 }
 
 class _PendingTasksScreenState extends State<PendingTasksScreen> {
@@ -28,7 +30,8 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+              _scrollController.position.maxScrollExtent &&
+          _pendingTaskList.length >= 5) {
         Timer(Duration(seconds: 2, milliseconds: 50), () {
           setState(() {
             _loadingProducts = false;
@@ -44,7 +47,7 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
 
   Future<void> _getInitTasks() async {
     _pendingTaskList = [];
-    var collection = _taskRef.limit(5);
+    var collection = _taskRef.where('isCompleted', isNotEqualTo: true).limit(5);
     print('getDocuments');
     await fetchDocuments(collection);
   }
@@ -59,7 +62,10 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
     var lastVisible = collectionState.docs[collectionState.docs.length - 1];
     print('listDocument legnth: ${collectionState.size} last: $lastVisible');
 
-    var collection = _taskRef.startAfterDocument(lastVisible).limit(5);
+    var collection = _taskRef
+        .startAfterDocument(lastVisible)
+        .where('isCompleted', isNotEqualTo: true)
+        .limit(5);
 
     await fetchDocuments(collection);
   }
@@ -73,6 +79,7 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
         setState(() {
           _pendingTaskList.add(
             Task(
+              id: element.id,
               title: element.data()['title'],
               description: element.data()['description'],
               dateAssigned: (element.data()['addedOn'] as Timestamp).toDate(),
@@ -87,6 +94,12 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.needsReload) {
+      _getInitTasks();
+      setState(() {
+        widget.needsReload = false;
+      });
+    }
     return (_pendingTaskList.length != 0)
         ? RefreshIndicator(
             backgroundColor: Colors.grey[900],
@@ -95,13 +108,40 @@ class _PendingTasksScreenState extends State<PendingTasksScreen> {
             child: ListView.builder(
               controller: _scrollController,
               itemBuilder: (ctx, index) {
-                if (index == _pendingTaskList.length && _pendingTaskList.length>=5)
+                if (index == _pendingTaskList.length &&
+                    _pendingTaskList.length >= 5)
                   return SpinKitFadingCircle(
                     color: Colors.white,
                   );
-                return TaskCard(_pendingTaskList[index]);
+                return Dismissible(
+                    onDismissed: (direction) async {
+                      
+                      await _taskRef
+                          .doc(
+                        _pendingTaskList[index].id,
+                      )
+                          .update(
+                        {'isCompleted': true},
+                      );
+                      _pendingTaskList.removeAt(index);
+                      setState(() {});
+                    },
+                    background: Container(
+                      padding: EdgeInsets.only(left: 15),
+                      alignment: Alignment.centerLeft,
+                      color: Theme.of(context).buttonColor,
+                      child: Icon(
+                        Icons.check,
+                        size: 40,
+                      ),
+                    ),
+                    direction: DismissDirection.startToEnd,
+                    key: ValueKey(
+                      _pendingTaskList[index].id,
+                    ),
+                    child: TaskCard(_pendingTaskList[index]));
               },
-              itemCount: (_loadingProducts && _pendingTaskList.length>=5)
+              itemCount: (_loadingProducts && _pendingTaskList.length >= 5)
                   ? _pendingTaskList.length + 1
                   : _pendingTaskList.length,
             ),

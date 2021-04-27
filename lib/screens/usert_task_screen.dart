@@ -4,7 +4,13 @@ import 'package:task_assigner/screens/addTask_screen.dart';
 import 'package:task_assigner/screens/completed_screen.dart';
 import 'package:task_assigner/screens/pending_screen.dart';
 
-class UserTaskScreen extends StatelessWidget {
+class UserTaskScreen extends StatefulWidget {
+  @override
+  _UserTaskScreenState createState() => _UserTaskScreenState();
+}
+
+class _UserTaskScreenState extends State<UserTaskScreen> {
+  bool needReload = false;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -42,15 +48,19 @@ class UserTaskScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            PendingTasksScreen(),
-            CompletedTasksScreen(),
+            PendingTasksScreen(needReload),
+            CompletedTasksScreen(needReload),
           ],
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: AddTaskScreen.routeName,
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.of(context).pushNamed(AddTaskScreen.routeName);
+            Navigator.of(context).pushNamed(AddTaskScreen.routeName).then((_) {
+              setState(() {
+                needReload = true;
+              });
+            });
           },
           backgroundColor: Theme.of(context).buttonColor,
         ),
