@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_assigner/models/todo.dart';
 import 'package:task_assigner/screens/new_todo.dart';
+import 'package:lottie/lottie.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -23,7 +24,13 @@ class HomeState extends State<Home> {
   //----------------------------------------------------------------------------
 
   Widget emptyList() {
-    return Center(child: Text('No items', style: TextStyle(fontSize: 18)));
+    return Center(
+        child: Lottie.asset(
+      "assets/images/629-empty-box.json",
+      width: 200,
+      height: 200,
+      fit: BoxFit.fill,
+    ));
   }
 
   //----------------------------------------------------------------------------
@@ -40,7 +47,15 @@ class HomeState extends State<Home> {
   Widget buildItem(Todo item, index) {
     return Dismissible(
       key: Key('${item.hashCode}'),
-      background: Container(color: Colors.red[700]),
+      background: Container(
+        padding: EdgeInsets.all(5),
+        color: Colors.red[700],
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+        alignment: Alignment.centerLeft,
+      ),
       onDismissed: (direction) => removeItem(item),
       direction: DismissDirection.startToEnd,
       child: buildListItem(item, index),
